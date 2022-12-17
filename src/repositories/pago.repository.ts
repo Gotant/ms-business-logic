@@ -1,10 +1,11 @@
 import {inject, Getter} from '@loopback/core';
 import {DefaultCrudRepository, repository, BelongsToAccessor} from '@loopback/repository';
 import {MysqlDataSource} from '../datasources';
-import {Pago, PagoRelations, Sucursal, Cobrador, Prestamo} from '../models';
+import {Pago, PagoRelations, Sucursal, Cobrador, Prestamo, Usuario} from '../models';
 import {SucursalRepository} from './sucursal.repository';
 import {CobradorRepository} from './cobrador.repository';
 import {PrestamoRepository} from './prestamo.repository';
+import {UsuarioRepository} from './usuario.repository';
 
 export class PagoRepository extends DefaultCrudRepository<
   Pago,
@@ -18,10 +19,14 @@ export class PagoRepository extends DefaultCrudRepository<
 
   public readonly prestamo: BelongsToAccessor<Prestamo, typeof Pago.prototype.id>;
 
+  public readonly usuario: BelongsToAccessor<Usuario, typeof Pago.prototype.id>;
+
   constructor(
-    @inject('datasources.mysql') dataSource: MysqlDataSource, @repository.getter('SucursalRepository') protected sucursalRepositoryGetter: Getter<SucursalRepository>, @repository.getter('CobradorRepository') protected cobradorRepositoryGetter: Getter<CobradorRepository>, @repository.getter('PrestamoRepository') protected prestamoRepositoryGetter: Getter<PrestamoRepository>,
+    @inject('datasources.mysql') dataSource: MysqlDataSource, @repository.getter('SucursalRepository') protected sucursalRepositoryGetter: Getter<SucursalRepository>, @repository.getter('CobradorRepository') protected cobradorRepositoryGetter: Getter<CobradorRepository>, @repository.getter('PrestamoRepository') protected prestamoRepositoryGetter: Getter<PrestamoRepository>, @repository.getter('UsuarioRepository') protected usuarioRepositoryGetter: Getter<UsuarioRepository>,
   ) {
     super(Pago, dataSource);
+    this.usuario = this.createBelongsToAccessorFor('usuario', usuarioRepositoryGetter,);
+    this.registerInclusionResolver('usuario', this.usuario.inclusionResolver);
     this.prestamo = this.createBelongsToAccessorFor('prestamo', prestamoRepositoryGetter,);
     this.registerInclusionResolver('prestamo', this.prestamo.inclusionResolver);
     this.cobradorCedulas = this.createBelongsToAccessorFor('cobradorCedulas', cobradorRepositoryGetter,);

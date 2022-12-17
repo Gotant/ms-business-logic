@@ -27,3 +27,5 @@ export * from './cobrador-pago.controller';
 export * from './pago-prestamo.controller';
 export * from './prestamo-pago.controller';
 export * from './archivos.controller';
+export * from './pago-usuario.controller';
+export * from './usuario-pago.controller';

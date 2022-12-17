@@ -2,6 +2,7 @@ import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Cobrador} from './cobrador.model';
 import {Prestamo} from './prestamo.model';
 import {Sucursal} from './sucursal.model';
+import {Usuario} from './usuario.model';
 
 @model({
   settings: {
@@ -73,6 +74,9 @@ export class Pago extends Entity {
 
   @belongsTo(() => Prestamo)
   prestamoId: number;
+
+  @belongsTo(() => Usuario)
+  usuarioId: number;
 
   constructor(data?: Partial<Pago>) {
     super(data);
